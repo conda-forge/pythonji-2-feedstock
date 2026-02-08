@@ -1,0 +1,52 @@
+schema_version: 1
+
+context:
+  name: pythonji-2
+  version: 0.1.2
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/pythonji_2-${{ version }}.tar.gz
+  sha256: f8ddf28712941e8401a29885a9fab2c0cbeeebe0ceb57f21cedfecfdfdb5ee08
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    entry_points:
+      - pythonji = pythonji.__main__:main
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - hatchling
+    - pip
+  run:
+    - python >=${{ python_min }}
+    - emoji
+
+tests:
+  - python:
+      imports:
+        - pythonji
+      python_version: ${{ python_min }}.*
+  - requirements:
+      run:
+        - pip
+        - python ${{ python_min }}.*
+    script:
+      - pip check
+
+about:
+  summary: 🐍 - Write Python with Emojis
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/pavelzw/pythonji-2
+
+extra:
+  recipe-maintainers:
+    - pavelzw
